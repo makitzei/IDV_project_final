@@ -1,0 +1,112 @@
+---
+title: "IDV project"
+author: "Maikki Heijala"
+format: 
+  dashboard:
+    orientation: columns
+    theme: flatly
+---
+
+## Column {width="30%"}
+
+```{r}
+#| title: "Price Ranges on  Map"
+#| padding: 10px
+
+print("Hello map!")
+
+```
+
+## Column
+
+### Row {height=60%}
+
+#### Column
+
+#### Row
+
+```{ojs}
+//| title: Data selection
+
+viewof chosen_area = Inputs.select(["kissa"], {value: "45100"})
+
+```
+
+##### Column
+```{r}
+#| content: valuebox
+#| title: "Highest e/m2 in area"
+list(
+  icon = "arrow-up-right",
+  color = "success",
+  value = 90
+)
+```
+
+##### Column
+```{r}
+#| content: valuebox
+#| title: "Lowest e/m2 in area"
+list(
+  icon = "arrow-down-right",
+  color = "warning",
+  value = 60
+)
+```
+
+#### Row
+
+```{ojs}
+//| title: Price Info
+
+viewof menu = Inputs.radio(["for rent", "for sale"], {label: "Market type:"})
+
+```
+
+##### Column
+```{r}
+#| content: valuebox
+#| title: "Highest e/m2 in Finland"
+list(
+  icon = "graph-up-arrow",
+  color = "light",
+  value = 110
+)
+```
+
+##### Column
+```{r}
+#| content: valuebox
+#| title: "Lowest e/m2 in Finland"
+list(
+  icon = "graph-down-arrow",
+  color = "light",
+  value = 50
+)
+```
+
+#### Column
+
+```{ojs}
+//| title: 5 year development
+
+"Line graph here"
+
+```
+
+### Row {.tabset}
+
+```{ojs}
+//| title: Age
+
+"Age info here"
+
+```
+
+
+```{ojs}
+//| title: Education
+
+"Education info here"
+
+```
