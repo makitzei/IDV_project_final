@@ -13,7 +13,7 @@ format:
 #| title: "Price Ranges on  Map"
 #| padding: 10px
 
-print("Hello map!")
+print("Hello Hey!")
 
 ```
 
