@@ -1,5 +1,6 @@
 project:
   title: "IDV_project_final"
+  type: website
   output-dir: docs
 
 editor: visual
