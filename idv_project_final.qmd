@@ -4,7 +4,6 @@ author: "Maikki Heijala"
 format: 
   dashboard:
     orientation: columns
-    theme: flatly
     expandable: false
 ---
 ```{r data_handling}
@@ -18,8 +17,8 @@ library(purrr)
 for_rent <- fromJSON(file="for_rent.json")
 for_rent2 <- fromJSON(file="for_rent2.json")
 for_sale <- fromJSON(file="for_sale.json")
-age <- fromJSON(file="age.json")
-education <- fromJSON(file="education.json")
+age <- fromJSON(file="age4.json")
+education <- fromJSON(file="education3.json")
 
 codes_names <- as.data.frame(
   do.call(
@@ -86,6 +85,7 @@ ojs_define(prize_max_all)
 ojs_define(prize_min_all)
 
 ```
+
 ## Column {width="30%"}
 
 ```{r}
@@ -235,7 +235,8 @@ Plot.plot({
 ```{ojs}
 //| title: Age
 
-"Age info here"
+agedata = age.data.filter(row => row.key === chosen_code)
+agedata
 
 ```
 
@@ -243,6 +244,7 @@ Plot.plot({
 ```{ojs}
 //| title: Education
 
-"Education info here"
+edudata = education.data.filter(row => row.key === chosen_code)
+edudata
 
 ```
