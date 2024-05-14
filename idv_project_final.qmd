@@ -5,8 +5,31 @@ format:
   dashboard:
     orientation: columns
     theme: flatly
+    expandable: false
 ---
+```{r data_handling}
+#| include: false
 
+library(rjson)
+library(dplyr)
+
+for_rent <- fromJSON(file="for_rent.json")
+for_sale <- fromJSON(file="for_sale.json")
+
+codes_names <- as.data.frame(
+  do.call(
+    rbind,
+    for_sale$dataset$dimension$Postinumero$category$label
+  )
+)
+codes_names$names <- rownames(codes_names)
+names <- codes_names$V1
+
+ojs_define(names)
+ojs_define(for_sale)
+ojs_define(for_rent)
+
+```
 ## Column {width="30%"}
 
 ```{r}
@@ -26,9 +49,9 @@ print("Hello Hey!")
 #### Row
 
 ```{ojs}
-//| title: Data selection
+//| title: Area selection
 
-viewof chosen_area = Inputs.select(["kissa"], {value: "45100"})
+viewof chosen_area = Inputs.select(names, {value: "45100"})
 
 ```
 
@@ -57,9 +80,9 @@ list(
 #### Row
 
 ```{ojs}
-//| title: Price Info
+//| title: Market type selection
 
-viewof menu = Inputs.radio(["for rent", "for sale"], {label: "Market type:"})
+viewof menu = Inputs.radio(["for rent", "for sale"])
 
 ```
 
