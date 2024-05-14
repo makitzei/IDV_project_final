@@ -9,25 +9,76 @@ format:
 ---
 ```{r data_handling}
 #| include: false
+#| warning: false
 
 library(rjson)
 library(dplyr)
+library(purrr)
 
 for_rent <- fromJSON(file="for_rent.json")
+for_rent2 <- fromJSON(file="for_rent2.json")
 for_sale <- fromJSON(file="for_sale.json")
+age <- fromJSON(file="age.json")
+education <- fromJSON(file="education.json")
 
 codes_names <- as.data.frame(
   do.call(
     rbind,
-    for_sale$dataset$dimension$Postinumero$category$label
+    for_rent$dataset$dimension$Postinumero$category$label
   )
 )
 codes_names$names <- rownames(codes_names)
 names <- codes_names$V1
 
+filtered_for_sale <- 
+  tibble(
+    info = map(for_sale$data, "key"),
+    price = map_chr(for_sale$data, "values")
+  ) %>% 
+  mutate(
+    year = map_chr(info, 1),
+    code = map_chr(info, 2) 
+  ) %>%
+  select(
+    code, year, price
+  ) %>%
+  mutate(
+    price = as.integer((price)),
+    year = substring(year, 1, 4)
+  ) %>%
+  na.omit() %>%
+  group_by(code, year) %>%
+  summarise(price_avg = mean(price)) %>%
+  mutate(price_avg = round(price_avg, 0))
+
+filtered_for_rent <- 
+  tibble(
+    info = map(for_rent2$data, "key"),
+    price = map_chr(for_rent2$data, "values")
+  ) %>% 
+  mutate(
+    year = map_chr(info, 1),
+    code = map_chr(info, 2) 
+  ) %>%
+  select(
+    code, year, price
+  ) %>%
+  mutate(
+    price = as.integer((price)),
+    year = substring(year, 1, 4)
+  ) %>%
+  na.omit() %>%
+  group_by(code, year) %>%
+  summarise(price_avg = mean(price)) %>%
+  mutate(price_avg = round(price_avg, 0))
+
 ojs_define(names)
 ojs_define(for_sale)
 ojs_define(for_rent)
+ojs_define(filtered_for_sale)
+ojs_define(filtered_for_rent)
+ojs_define(age)
+ojs_define(education)
 
 ```
 ## Column {width="30%"}
@@ -51,7 +102,11 @@ print("Hello Hey!")
 ```{ojs}
 //| title: Area selection
 
-viewof chosen_area = Inputs.select(names, {value: "45100"})
+viewof chosen_area = Inputs.select(names)
+
+header_name = chosen_area.split(' (')[0];
+chosen_code = header_name.split(' ')[0]
+html`<h3>${header_name}</h3>`
 
 ```
 
@@ -82,7 +137,7 @@ list(
 ```{ojs}
 //| title: Market type selection
 
-viewof menu = Inputs.radio(["for rent", "for sale"])
+viewof market = Inputs.radio(["for rent", "for sale"], {value: "for rent"})
 
 ```
 
@@ -113,7 +168,8 @@ list(
 ```{ojs}
 //| title: 5 year development
 
-"Line graph here"
+chosen_code
+
 
 ```
 
