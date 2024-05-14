@@ -168,7 +168,17 @@ list(
 ```{ojs}
 //| title: 5 year development
 
-data = transpose(filtered_for_rent)
+function get_linedata(m) {
+  if (m == "for sale") {
+    return [transpose(filtered_for_sale), 10000]
+  }
+  return [transpose(filtered_for_rent), 50]
+}
+
+linedata = get_linedata(market)
+data = linedata[0]
+y_limit = linedata[1]
+
 t_linedata = data.filter(row => row.code === chosen_code)
 
 Plot.plot({
@@ -177,10 +187,10 @@ Plot.plot({
   marginBottom: 50,
   marginLeft: 50,
   height: 450,
-  width: 300,
+  width: 350,
   y: {
     grid: true,
-    domain: [0, 50],
+    domain: [0, y_limit],
   },
   x: {
     domain: [2019, 2023],
