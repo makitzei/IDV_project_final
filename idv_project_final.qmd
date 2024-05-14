@@ -168,7 +168,33 @@ list(
 ```{ojs}
 //| title: 5 year development
 
-chosen_code
+data = transpose(filtered_for_rent)
+t_linedata = data.filter(row => row.code === chosen_code)
+
+Plot.plot({
+  marginTop: 100,
+  marginRight: 50,
+  marginBottom: 50,
+  marginLeft: 50,
+  height: 450,
+  width: 300,
+  y: {
+    grid: true,
+    domain: [0, 50],
+  },
+  x: {
+    domain: [2019, 2023],
+    tickFormat: "",
+    interval: 1
+  },
+  marks: [
+    Plot.ruleY([0]),
+    Plot.dot(t_linedata, {x: "year", y: "price_avg", channels: {year: "year", price_avg: "price"}, tip: true}),
+    Plot.areaY(t_linedata, {x: "year", y: "price_avg", fillOpacity: 0.1}),
+    Plot.lineY(t_linedata, {x: "year", y: "price_avg"}),
+    Plot.frame()
+  ]
+})
 
 
 ```
