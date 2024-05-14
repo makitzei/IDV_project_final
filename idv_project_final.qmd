@@ -111,7 +111,6 @@ viewof chosen_area = Inputs.select(names)
 
 header_name = chosen_area.split(' (')[0];
 chosen_code = header_name.split(' ')[0]
-html`<h4>${header_name}</h4>`
 
 prize_max_area = 67
 prize_min_area = 15
@@ -189,6 +188,8 @@ Plot.plot({
 ```{ojs}
 //| title: 5 year development
 
+html`<h4>${header_name}</h4>`
+
 function get_linedata(m) {
   if (m == "for sale") {
     return [filtered_for_sale, 10000]
@@ -240,6 +241,9 @@ agedata
 
 ```
 
+::: {.card title="Age Figure"}
+0-2-vuotiaat: ![](universal-access.svg) ![](universal-access.svg) 
+:::
 
 ```{ojs}
 //| title: Education
