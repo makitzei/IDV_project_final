@@ -72,13 +72,18 @@ filtered_for_rent <-
   summarise(price_avg = mean(price)) %>%
   mutate(price_avg = round(price_avg, 0))
 
+prize_max_all = max(filtered_for_sale$price_avg)
+prize_min_all = min(filtered_for_sale$price_avg)
+
 ojs_define(names)
 ojs_define(for_sale)
 ojs_define(for_rent)
-ojs_define(filtered_for_sale)
-ojs_define(filtered_for_rent)
 ojs_define(age)
 ojs_define(education)
+ojs_define(filtered_for_sale)
+ojs_define(filtered_for_rent)
+ojs_define(prize_max_all)
+ojs_define(prize_min_all)
 
 ```
 ## Column {width="30%"}
@@ -106,30 +111,40 @@ viewof chosen_area = Inputs.select(names)
 
 header_name = chosen_area.split(' (')[0];
 chosen_code = header_name.split(' ')[0]
-html`<h3>${header_name}</h3>`
+html`<h4>${header_name}</h4>`
+
+prize_max_area = 67
+prize_min_area = 15
 
 ```
 
 ##### Column
-```{r}
-#| content: valuebox
-#| title: "Highest e/m2 in area"
-list(
-  icon = "arrow-up-right",
-  color = "success",
-  value = 90
-)
+
+```{ojs valuebox_high_area}
+//| padding: 0px
+//| fill: true
+
+Plot.plot({
+  marks: [
+    Plot.frame({fill: "#97fc16"}),
+    Plot.text(["\nHighest e/m2 in area"], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
+    Plot.text([prize_max_area], {frameAnchor: "middle", fontSize: 50, fontWeight: "bold"})
+  ]
+})
 ```
 
 ##### Column
-```{r}
-#| content: valuebox
-#| title: "Lowest e/m2 in area"
-list(
-  icon = "arrow-down-right",
-  color = "warning",
-  value = 60
-)
+
+```{ojs valuebox_low_area}
+//| padding: 0px
+
+Plot.plot({
+  marks: [
+    Plot.frame({fill: "#fc9016" }),
+    Plot.text(["\nLowest e/m2 in area"], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
+    Plot.text([prize_min_area], {frameAnchor: "middle", fontSize: 50, fontWeight: "bold"})
+  ]
+})
 ```
 
 #### Row
@@ -142,25 +157,31 @@ viewof market = Inputs.radio(["for rent", "for sale"], {value: "for rent"})
 ```
 
 ##### Column
-```{r}
-#| content: valuebox
-#| title: "Highest e/m2 in Finland"
-list(
-  icon = "graph-up-arrow",
-  color = "light",
-  value = 110
-)
+
+```{ojs valuebox_high_finland}
+//| padding: 0px
+
+Plot.plot({
+  marks: [
+    Plot.frame({fill: "#ece5dd" }),
+    Plot.text(["\nHighest e/m2 in Finland"], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
+    Plot.text([prize_max_all], {frameAnchor: "middle", fontSize: 50, fontWeight: "bold"})
+  ]
+})
 ```
 
 ##### Column
-```{r}
-#| content: valuebox
-#| title: "Lowest e/m2 in Finland"
-list(
-  icon = "graph-down-arrow",
-  color = "light",
-  value = 50
-)
+
+```{ojs valuebox_low_finland}
+//| padding: 0px
+
+Plot.plot({
+  marks: [
+    Plot.frame({fill: "#ece5dd" }),
+    Plot.text(["\nLowest e/m2 in Finland"], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
+    Plot.text([prize_min_all], {frameAnchor: "middle", fontSize: 50, fontWeight: "bold"})
+  ]
+})
 ```
 
 #### Column
@@ -170,13 +191,13 @@ list(
 
 function get_linedata(m) {
   if (m == "for sale") {
-    return [transpose(filtered_for_sale), 10000]
+    return [filtered_for_sale, 10000]
   }
-  return [transpose(filtered_for_rent), 50]
+  return [filtered_for_rent, 50]
 }
 
 linedata = get_linedata(market)
-data = linedata[0]
+data = transpose(linedata[0])
 y_limit = linedata[1]
 
 t_linedata = data.filter(row => row.code === chosen_code)
