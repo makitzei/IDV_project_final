@@ -101,15 +101,29 @@ library(dplyr)
 library(leaflet)
 library(geojsonsf)
 library(rjson)
+library(sf)
 
 geo_data <- geojson_sf("finland-postal-codes.geojson")
 
-bins <- c(0, 10000, 20000, 40000, 50000, 60000, 70000, 80000, 90000, Inf)
-pal <- colorBin("YlOrRd", domain = c(0, 100000), bins = bins)
+# Sales data of 2023 to the map
+for_sale_2023 <- filtered_for_sale %>%
+  filter(year ==2023)
+
+geo_data <- left_join(
+  geo_data, 
+  for_sale_2023, 
+  by = c("postinumeroalue" = "code")
+)
+
+my_colors = c('#247800', '#839168', '#b59fa3', '#ffb1ff')  
+
+bins <- c(0, 2000, 5000, 7000, Inf)
+pal <- colorBin(my_colors, domain = c(0, 10000), bins = bins)
 
 labels <- sprintf(
-  "<strong>%s</strong><br/> euros / m<sup>2</sup>",
-  geo_data$postinumeroalue 
+  "<strong>%s</strong> euros / m<sup>2</sup><br/>area: %s",
+  geo_data$price_avg,
+  geo_data$postinumeroalue
 ) %>% lapply(htmltools::HTML)
 
 
@@ -119,7 +133,7 @@ m <- leaflet(geo_data) %>%
   accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
   setView(lat = 64, lng = 26, zoom = 5) %>%
   addPolygons(
-    fillColor = ~pal(as.numeric(geo_data$postinumeroalue)),
+    fillColor = ~pal(as.numeric(geo_data$price_avg)),
     weight = 2,
     opacity = 1,
     color = "white",
@@ -134,7 +148,7 @@ m <- leaflet(geo_data) %>%
     label = labels
     )
 
-m %>% addLegend(pal = pal, values = as.numeric(geo_data$postinumeroalue), opacity = 0.7, title = NULL,
+m %>% addLegend(pal = pal, values = as.numeric(geo_data$price_avg), opacity = 0.7, title = NULL,
   position = "bottomright")
 
 ```
@@ -182,7 +196,7 @@ prize_min_all = fin_tiles[1]
 
 Plot.plot({
   marks: [
-    Plot.frame({fill: "#97fc16"}),
+    Plot.frame({fill: "#247800"}),
     Plot.text(["\nHighest e/m2 in area " + market], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
     Plot.text([prize_max_area], {frameAnchor: "middle", fontSize: 50, fontWeight: "bold"})
   ]
@@ -196,7 +210,7 @@ Plot.plot({
 
 Plot.plot({
   marks: [
-    Plot.frame({fill: "#fc9016" }),
+    Plot.frame({fill: "#ffb1ff" }),
     Plot.text(["\nLowest e/m2 in area " + market], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
     Plot.text([prize_min_area], {frameAnchor: "middle", fontSize: 50, fontWeight: "bold"})
   ]
