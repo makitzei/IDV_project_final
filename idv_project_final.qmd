@@ -71,8 +71,11 @@ filtered_for_rent <-
   summarise(price_avg = mean(price)) %>%
   mutate(price_avg = round(price_avg, 0))
 
-prize_max_all = max(filtered_for_sale$price_avg)
-prize_min_all = min(filtered_for_sale$price_avg)
+# These min and max value stay the same so they can be calculated in R
+sale_max_all = max(filtered_for_sale$price_avg)
+sale_min_all = min(filtered_for_sale$price_avg)
+rent_max_all = max(filtered_for_rent$price_avg)
+rent_min_all = min(filtered_for_rent$price_avg)
 
 ojs_define(names)
 ojs_define(for_sale)
@@ -81,8 +84,10 @@ ojs_define(age)
 ojs_define(education)
 ojs_define(filtered_for_sale)
 ojs_define(filtered_for_rent)
-ojs_define(prize_max_all)
-ojs_define(prize_min_all)
+ojs_define(sale_max_all)
+ojs_define(sale_min_all)
+ojs_define(rent_max_all)
+ojs_define(rent_min_all)
 
 ```
 
@@ -93,6 +98,7 @@ ojs_define(prize_min_all)
 #| padding: 10px
 
 print("Hello Hey!")
+
 
 ```
 
@@ -112,9 +118,23 @@ viewof chosen_area = Inputs.select(names)
 header_name = chosen_area.split(' (')[0];
 chosen_code = header_name.split(' ')[0]
 
-prize_max_area = 67
-prize_min_area = 15
+// Tile value calculations here so they won't show on site
+max_tile = Math.max.apply(Math, tiledata.map(function(o) { return o.price_avg }))
+min_tile = Math.min.apply(Math, tiledata.map(function(o) { return o.price_avg }))
 
+function get_tiledata(m) {
+  if (m == "for sale") {
+    return [sale_max_all, sale_min_all]
+  }
+  return [rent_max_all, rent_min_all]
+}
+
+prize_max_area = max_tile
+prize_min_area = min_tile
+
+fin_tiles = get_tiledata(market)
+prize_max_all = fin_tiles[0]
+prize_min_all = fin_tiles[1]
 ```
 
 ##### Column
@@ -126,7 +146,7 @@ prize_min_area = 15
 Plot.plot({
   marks: [
     Plot.frame({fill: "#97fc16"}),
-    Plot.text(["\nHighest e/m2 in area"], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
+    Plot.text(["\nHighest e/m2 in area " + market], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
     Plot.text([prize_max_area], {frameAnchor: "middle", fontSize: 50, fontWeight: "bold"})
   ]
 })
@@ -140,7 +160,7 @@ Plot.plot({
 Plot.plot({
   marks: [
     Plot.frame({fill: "#fc9016" }),
-    Plot.text(["\nLowest e/m2 in area"], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
+    Plot.text(["\nLowest e/m2 in area " + market], {frameAnchor: "top", fontSize: 18, fontWeight: "bold"}),
     Plot.text([prize_min_area], {frameAnchor: "middle", fontSize: 50, fontWeight: "bold"})
   ]
 })
@@ -203,12 +223,14 @@ y_limit = linedata[1]
 
 t_linedata = data.filter(row => row.code === chosen_code)
 
+tiledata = t_linedata
+
 Plot.plot({
-  marginTop: 100,
+  marginTop: 50,
   marginRight: 50,
   marginBottom: 50,
   marginLeft: 50,
-  height: 450,
+  height: 400,
   width: 350,
   y: {
     grid: true,
