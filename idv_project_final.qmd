@@ -323,63 +323,31 @@ function sum_pairs(arr) {
 
 edudata = education.data.filter(row => row.key === chosen_code)
   .map(row => row.values)[0]
+  
+edudata_holder = edudata.splice(1, 1)
 
-edu_labels = ["basic level", "at least\nupper\nsecondary", "matriculation\nexamination", "vocational\ndiploma", "lower\nacademic", "higher\nacademic"]
+edu_labels = ["basic level", "matriculation\nexamination", "vocational\ndiploma", "lower\nacademic", "higher\nacademic"]
 
 edu_combi = [edu_labels, edudata]
 
 ```
 
-### Row {.tabset}
+### Row
 
 ```{ojs}
 //| title: Age
 
-html`
- <table>
-  <tr>
-    <td>${age_labels[0]}</td>
-    <td>${age_groups[0]}</td>
-  </tr>
-    <tr>
-    <td>${age_labels[1]}</td>
-    <td>${age_groups[1]}</td>
-  </tr>
-  <tr>
-    <td>${age_labels[2]}</td>
-    <td>${age_groups[2]}</td>
-  </tr>
-  <tr>
-    <td>${age_labels[3]}</td>
-    <td>${age_groups[3]}</td>
-  </tr>
-  <tr>
-    <td>${age_labels[4]}</td>
-    <td>${age_groups[4]}</td>
-  </tr>
-  <tr>
-    <td>${age_labels[5]}</td>
-    <td>${age_groups[5]}</td>
-  </tr>
-  <tr>
-    <td>${age_labels[6]}</td>
-    <td>${age_groups[6]}</td>
-  </tr>
-  <tr>
-    <td>${age_labels[7]}</td>
-    <td>${age_groups[7]}</td>
-  </tr>
-    <tr>
-    <td>${age_labels[8]}</td>
-    <td>${age_groups[8]}</td>
-  </tr>
-  <tr>
-    <td>${age_labels[9]}</td>
-    <td>${age_groups[9]}</td>
-  </tr>
-</table> 
-
-`
+ageplot = Plot.plot({
+  x: {padding: 0.4},
+  y: {
+    grid: true,
+    label: "%",
+    domain: [0, 20],
+  },
+  marks: [
+    Plot.barY(age_groups, {x: age_labels})
+  ]
+})
 
 ```
 
@@ -387,34 +355,16 @@ html`
 ```{ojs}
 //| title: Education
 
-html`
- <table>
-  <tr>
-    <td>${edu_labels[1]}</td>
-    <td>${edudata[1]}</td>
-  </tr>
-    <tr>
-    <td>${edu_labels[0]}</td>
-    <td>${edudata[0]}</td>
-  </tr>
-  <tr>
-    <td>${edu_labels[2]}</td>
-    <td>${edudata[2]}</td>
-  </tr>
-  <tr>
-    <td>${edu_labels[3]}</td>
-    <td>${edudata[3]}</td>
-  </tr>
-  <tr>
-    <td>${edu_labels[4]}</td>
-    <td>${edudata[4]}</td>
-  </tr>
-  <tr>
-    <td>${edu_labels[5]}</td>
-    <td>${edudata[5]}</td>
-  </tr>
-</table> 
-
-`
+eduplot = Plot.plot({
+  x: {padding: 0.4},
+  y: {
+    grid: true,
+    label: "%",
+    domain: [0, 20],
+  },
+  marks: [
+    Plot.barY(edudata, {x: edu_labels})
+  ]
+})
 
 ```
