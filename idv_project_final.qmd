@@ -235,6 +235,7 @@ Plot.plot({
   y: {
     grid: true,
     domain: [0, y_limit],
+    label: "price/m2"
   },
   x: {
     domain: [2019, 2023],
@@ -250,6 +251,31 @@ Plot.plot({
   ]
 })
 
+// Age data handling here so it won't show on the Age card
+agedata = age.data.filter(row => row.key === chosen_code)
+  .map(row => row.values)[0]
+
+age_groups = sum_pairs(agedata)
+age_labels = ["0-6", "7-15", "16-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80-"]
+
+age_combi = [age_labels, age_groups]
+  
+function sum_pairs(arr) {
+  const grouped_ages = []
+  for (let i = 0; i < 20; i += 2) {
+    grouped_ages.push(Math.round(Number(arr[i])+Number(arr[i+1])))
+  }
+  return grouped_ages
+}
+
+// Education data handling
+
+edudata = education.data.filter(row => row.key === chosen_code)
+  .map(row => row.values)[0]
+
+edu_labels = ["basic level", "at least\nupper\nsecondary", "matriculation\nexamination", "vocational\ndiploma", "lower\nacademic", "higher\nacademic"]
+
+edu_combi = [edu_labels, edudata]
 
 ```
 
@@ -258,19 +284,21 @@ Plot.plot({
 ```{ojs}
 //| title: Age
 
-agedata = age.data.filter(row => row.key === chosen_code)
-agedata
+age_combi
 
 ```
 
-::: {.card title="Age Figure"}
-0-2-vuotiaat: ![](universal-access.svg) ![](universal-access.svg) 
-:::
 
 ```{ojs}
 //| title: Education
 
-edudata = education.data.filter(row => row.key === chosen_code)
-edudata
+edu_combi
+
+Plot.plot({
+  x: {padding: 0.4},
+  marks: [
+    Plot.barY(edu_combi),
+  ]
+})
 
 ```
