@@ -1,6 +1,5 @@
 ---
 title: "IDV project"
-author: "Maikki Heijala"
 format: 
   dashboard:
     orientation: columns
@@ -94,7 +93,7 @@ ojs_define(rent_min_all)
 ## Column {width="30%"}
 
 ```{r}
-#| title: "Ales Price Averages on  Map"
+#| title: "Sales Price Averages on  Map"
 #| padding: 10px
 
 library(dplyr)
