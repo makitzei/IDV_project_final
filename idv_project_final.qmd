@@ -284,7 +284,51 @@ edu_combi = [edu_labels, edudata]
 ```{ojs}
 //| title: Age
 
-age_combi
+html`
+ <table>
+  <tr>
+    <td>${age_labels[0]}</td>
+    <td>${age_groups[0]}</td>
+  </tr>
+    <tr>
+    <td>${age_labels[1]}</td>
+    <td>${age_groups[1]}</td>
+  </tr>
+  <tr>
+    <td>${age_labels[2]}</td>
+    <td>${age_groups[2]}</td>
+  </tr>
+  <tr>
+    <td>${age_labels[3]}</td>
+    <td>${age_groups[3]}</td>
+  </tr>
+  <tr>
+    <td>${age_labels[4]}</td>
+    <td>${age_groups[4]}</td>
+  </tr>
+  <tr>
+    <td>${age_labels[5]}</td>
+    <td>${age_groups[5]}</td>
+  </tr>
+  <tr>
+    <td>${age_labels[6]}</td>
+    <td>${age_groups[6]}</td>
+  </tr>
+  <tr>
+    <td>${age_labels[7]}</td>
+    <td>${age_groups[7]}</td>
+  </tr>
+    <tr>
+    <td>${age_labels[8]}</td>
+    <td>${age_groups[8]}</td>
+  </tr>
+  <tr>
+    <td>${age_labels[9]}</td>
+    <td>${age_groups[9]}</td>
+  </tr>
+</table> 
+
+`
 
 ```
 
@@ -292,13 +336,34 @@ age_combi
 ```{ojs}
 //| title: Education
 
-edu_combi
+html`
+ <table>
+  <tr>
+    <td>${edu_labels[1]}</td>
+    <td>${edudata[1]}</td>
+  </tr>
+    <tr>
+    <td>${edu_labels[0]}</td>
+    <td>${edudata[0]}</td>
+  </tr>
+  <tr>
+    <td>${edu_labels[2]}</td>
+    <td>${edudata[2]}</td>
+  </tr>
+  <tr>
+    <td>${edu_labels[3]}</td>
+    <td>${edudata[3]}</td>
+  </tr>
+  <tr>
+    <td>${edu_labels[4]}</td>
+    <td>${edudata[4]}</td>
+  </tr>
+  <tr>
+    <td>${edu_labels[5]}</td>
+    <td>${edudata[5]}</td>
+  </tr>
+</table> 
 
-Plot.plot({
-  x: {padding: 0.4},
-  marks: [
-    Plot.barY(edu_combi),
-  ]
-})
+`
 
 ```
