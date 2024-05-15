@@ -94,11 +94,48 @@ ojs_define(rent_min_all)
 ## Column {width="30%"}
 
 ```{r}
-#| title: "Price Ranges on  Map"
+#| title: "Ales Price Averages on  Map"
 #| padding: 10px
 
-print("Hello Hey!")
+library(dplyr)
+library(leaflet)
+library(geojsonsf)
+library(rjson)
 
+geo_data <- geojson_sf("finland-postal-codes.geojson")
+
+bins <- c(0, 10000, 20000, 40000, 50000, 60000, 70000, 80000, 90000, Inf)
+pal <- colorBin("YlOrRd", domain = c(0, 100000), bins = bins)
+
+labels <- sprintf(
+  "<strong>%s</strong><br/> euros / m<sup>2</sup>",
+  geo_data$postinumeroalue 
+) %>% lapply(htmltools::HTML)
+
+
+m <- leaflet(geo_data) %>%
+  addProviderTiles("MapBox", options = providerTileOptions(
+  id = "mapbox.light",
+  accessToken = Sys.getenv('MAPBOX_ACCESS_TOKEN'))) %>%
+  setView(lat = 64, lng = 26, zoom = 5) %>%
+  addPolygons(
+    fillColor = ~pal(as.numeric(geo_data$postinumeroalue)),
+    weight = 2,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlightOptions = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE),
+    label = labels
+    )
+
+m %>% addLegend(pal = pal, values = as.numeric(geo_data$postinumeroalue), opacity = 0.7, title = NULL,
+  position = "bottomright")
 
 ```
 
